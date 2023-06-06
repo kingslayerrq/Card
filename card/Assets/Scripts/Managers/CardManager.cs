@@ -23,6 +23,10 @@ public class CardManager : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        displayHand();
+    }
     // populate the drawPile
     public void initDrawPile()
     {
