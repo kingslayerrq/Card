@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac05b5c3d980c8948bd5f74beb09adc6, type: 3}
+  m_Name: C001
+  m_EditorClassIdentifier: 
+  cId: 001
+  cName: Attack
+  cDescription: Attack once
+  cRarity: 0
+  cType: 0
+  cTarget: 1
+  cardPrefab: {fileID: 998305087772932483, guid: 693f5635ee9d17e47adaf95c6a663baf, type: 3}
+  cStatus: 0
