@@ -7,7 +7,7 @@ public class UnitManager : MonoBehaviour
 {
     public static UnitManager Instance;
     [SerializeField] private float playerX, playerY;
-    private List<ScriptableUnit> _units;   //load all ScriptableUnits into a list
+    public List<ScriptableUnit> _units;   //load all ScriptableUnits into a list
 
     void Awake()
     {
@@ -16,23 +16,27 @@ public class UnitManager : MonoBehaviour
 
     }
 
-    // spawning the player
-    public void spawnPlayer(string name)
+    // construct Player, loadData
+    public BasePlayer spawnPlayer(string name)
     {
-        var playerPrefab = getPlayer<BasePlayer>(name);
-        var spawnedPlayer = Instantiate(playerPrefab);
-        spawnedPlayer.transform.position = new Vector3(playerX, playerY, 0);
+        var playerData = getUnitData<BasePlayer>(Faction.Player, name);
+        var player = Instantiate(playerData.unitPrefab);
+        player.loadUnitData(playerData);
+        player.transform.position = new Vector3(playerX, playerY, 0);
+        return (BasePlayer)player;
     }
 
-    // get a Player by name
-    private T getPlayer<T>(string unitName) where T:BasePlayer
+    
+
+    // get PlayerData
+    private ScriptableUnit getUnitData<T>(Faction unitFaction, string unitName) where T : BaseUnit
     {
-        return (T)_units.Where(u => u.unitFaction == Faction.Player && u.unitName == name).FirstOrDefault().unitPrefab;
+        return (ScriptableUnit)_units.Where(u => u.unitFaction == unitFaction && u.unitName == unitName).FirstOrDefault();
     }
 
     // get Enemy
-    private T getEnemy<T>(string unitName) where T : BaseEnemy
+    private T getEnemy<T>(string unitName) where T:BaseEnemy
     {
-        return (T)_units.Where(u => u.unitFaction == Faction.Enemy && u.unitName == name).FirstOrDefault().unitPrefab;
+        return (T)_units.Where(u => u.unitFaction == Faction.Enemy && u.unitName == unitName).FirstOrDefault().unitPrefab;
     }
 }

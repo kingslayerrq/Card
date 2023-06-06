@@ -2,19 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseUnit : MonoBehaviour
+public abstract class BaseUnit : MonoBehaviour
 {
-    protected string unitName;
-    protected int unitHealth;
-    protected int curGauge;
-    protected int maxGauge;
-    protected bool isDead;
-    public BaseUnit(string unitName, int unitHealth, int curGauge, int maxGauge, bool isDead)
+    public string unitName;
+    public int unitHealth;
+    public int curGauge;
+    public int maxGauge;
+    public bool isDead;
+    protected ScriptableUnit unitData;
+
+
+    
+    public virtual void loadUnitData(ScriptableUnit unitData)
     {
-        this.unitName = unitName;
-        this.unitHealth = unitHealth;
-        this.curGauge = curGauge;
-        this.maxGauge = maxGauge;
-        this.isDead = isDead;
+        this.unitName = unitData.unitName;
+        this.unitHealth = unitData.unitHealth;
+        this.curGauge = unitData.curGauge;
+        this.maxGauge = unitData.maxGauge;
+        this.isDead = unitData.isDead;
     }
 }

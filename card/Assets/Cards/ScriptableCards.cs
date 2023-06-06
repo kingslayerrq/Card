@@ -11,8 +11,9 @@ public class ScriptableCards : ScriptableObject
     public Rarity cRarity;
     public Type cType;
     public Target cTarget;
-    public BaseCard cardPrefab;
+    public BaseCard cPrefab;
     public curStatus cStatus;
+    public bool isShown;
 
 
 }

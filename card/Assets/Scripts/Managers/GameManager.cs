@@ -22,10 +22,18 @@ public class GameManager : MonoBehaviour
         switch (newState)
         {
             case GameState.initState:
+                UnitManager.Instance.spawnPlayer("Player01");
+                CardManager.Instance.initDrawPile();
+                CardManager.Instance.drawCards(1);
+                CardManager.Instance.displayHand();
+                updateGameState(GameState.drawState);
                 break;
             case GameState.checkState:
                 break;
             case GameState.drawState:
+                Debug.Log("drawstate");
+                CardManager.Instance.drawCards(2);
+                CardManager.Instance.displayHand();
                 break;
             case GameState.playerTurn:
                 break;

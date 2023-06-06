@@ -18,5 +18,5 @@ MonoBehaviour:
   cRarity: 0
   cType: 1
   cTarget: 0
-  cardPrefab: {fileID: 7583495196338277399, guid: bbdfa7fae6ed9de43b8871a401401711, type: 3}
+  cPrefab: {fileID: 7583495196338277399, guid: bbdfa7fae6ed9de43b8871a401401711, type: 3}
   cStatus: 0

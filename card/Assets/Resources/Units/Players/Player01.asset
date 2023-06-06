@@ -13,4 +13,9 @@ MonoBehaviour:
   m_Name: Player01
   m_EditorClassIdentifier: 
   unitPrefab: {fileID: -3664859435580202102, guid: 131dc8ee41bac174a8fb9d65729819a7, type: 3}
-  _faction: 0
+  unitFaction: 0
+  unitName: Player01
+  unitHealth: 10
+  curGauge: 0
+  maxGauge: 5
+  isDead: 0
