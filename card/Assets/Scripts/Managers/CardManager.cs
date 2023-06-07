@@ -8,7 +8,7 @@ public class CardManager : MonoBehaviour
     public static CardManager Instance;
     private List<ScriptableCards> _cards; // all cards info
     private List<ScriptableCards> availCards = new List<ScriptableCards>();
-    private List<BaseCard> handDeck = new List<BaseCard>();
+    private List<BaseCard> handDeck = new List<BaseCard>(); //contains basecard objects
     private Dictionary<ScriptableCards, int> cardDict;
     [SerializeField] private int maxHandSize;
     [SerializeField] private List<Transform> cardSlotPos;

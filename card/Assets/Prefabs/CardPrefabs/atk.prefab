@@ -105,6 +105,9 @@ MonoBehaviour:
   cType: 0
   cTarget: 0
   cStatus: 0
+  cPrefab: {fileID: 0}
+  isShown: 0
+  isActive: 0
 --- !u!61 &1411852391456826235
 BoxCollider2D:
   m_ObjectHideFlags: 0
