@@ -8,10 +8,12 @@ public class CardManager : MonoBehaviour
     public static CardManager Instance;
     private List<ScriptableCards> _cards; // all cards info
     private List<ScriptableCards> availCards = new List<ScriptableCards>();
+    private List<ScriptableCards> handDeckData = new List<ScriptableCards>();
+    private List<ScriptableCards> discardDeckData = new List<ScriptableCards>();
     private List<BaseCard> handDeck = new List<BaseCard>(); //contains basecard objects
     private Dictionary<ScriptableCards, int> cardDict;
     [SerializeField] private int maxHandSize;
-    [SerializeField] private List<Transform> cardSlotPos;
+    [SerializeField] private List<CardSlot> cardSlotPos;
 
     private void Awake()
     {
@@ -25,7 +27,7 @@ public class CardManager : MonoBehaviour
 
     private void Update()
     {
-        displayHand();
+        instantiateCardData(handDeckData);
     }
     // populate the drawPile
     public void initDrawPile()
@@ -44,6 +46,7 @@ public class CardManager : MonoBehaviour
 
     }
 
+    // draw cardData to handDeckData
     public void drawCards(int num)
     {
         if (GameManager.Instance.gameState == GameState.drawState)
@@ -51,21 +54,18 @@ public class CardManager : MonoBehaviour
             for (int i = 0 ; i < num; i++)
             {
                 var cardToDrawData = getRandomCardFromList<BaseCard>(availCards, curStatus.inDraw);
-                if (handDeck.Count < maxHandSize)
+                availCards.Remove(cardToDrawData);
+                if (handDeckData.Count < maxHandSize)
                 {          
-                    cardToDrawData.cStatus = curStatus.inHand;
-                    var cardInstance = Instantiate(cardToDrawData.cPrefab);
-                    cardInstance.loadCardData(cardToDrawData);
-                    handDeck.Add(cardInstance);
+                    handDeckData.Add(cardToDrawData);
+                    cardToDrawData.cStatus = curStatus.inHand;     
                 }
                 else
                 {
-                    cardToDrawData.cStatus = curStatus.inDiscard;
+                    discardCard(cardToDrawData);               
                 }
             }
-        }
-        
-        
+        }  
     }
     public void setCardSlotPos(int cardNum)
     {
@@ -76,23 +76,33 @@ public class CardManager : MonoBehaviour
     {
         
     }
-    public void displayHand()
+    public void instantiateCardData(List<ScriptableCards> cardData)
     {
-        for (int i = 0; i < handDeck.Count; i++)
+        //Debug.Log("inst");
+
+        if (cardData.Any())
         {
-            if (!handDeck[i].isShown)
+            foreach (var card in cardData)
             {
-                //var cardToShow = Instantiate(handDeck[i].cPrefab);
-                handDeck[i].transform.position = cardSlotPos[i].position;
-                handDeck[i].isShown = true;
+                var cs = cardSlotPos.Where(cs=> cs.isEmpty).First();
+                var cardInstance = Instantiate(card.cPrefab, GameManager.Instance.mainCanvas.transform);
+                cardInstance.transform.position = cs.transform.position;
+                cardInstance.transform.localScale = new Vector3(10, 10, 0);
+                cs.isEmpty = false;
+                cardInstance.loadCardData(card);
+                cardInstance.isShown = true;
+                cardData.Remove(card);
             }
             
         }
+        
     }
 
-    public void discardCard()
+    public void discardCard(ScriptableCards discarded)
     {
-
+        discarded.cStatus = curStatus.inDiscard;
+        Destroy(discarded.cPrefab);
+        discardDeckData.Add(discarded);
     }
 
     // get random cardData

@@ -6,10 +6,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public Canvas mainCanvas;
     public GameState gameState;
     private void Awake()
     {
         Instance = this;
+        
     }
 
     private void Start()
@@ -25,7 +27,7 @@ public class GameManager : MonoBehaviour
                 UnitManager.Instance.spawnPlayer("Player01");
                 CardManager.Instance.initDrawPile();
                 CardManager.Instance.drawCards(1);
-                CardManager.Instance.displayHand();
+                
                 updateGameState(GameState.drawState);
                 break;
             case GameState.checkState:
@@ -33,7 +35,7 @@ public class GameManager : MonoBehaviour
             case GameState.drawState:
                 Debug.Log("drawstate");
                 CardManager.Instance.drawCards(2);
-                CardManager.Instance.displayHand();
+                
                 break;
             case GameState.playerTurn:
                 break;

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class BaseCard : MonoBehaviour
+public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     
     public static Vector3 cardRenderScale = new Vector3(0.2f, 0.2f, 0);
@@ -40,30 +41,7 @@ public class BaseCard : MonoBehaviour
     }
 
 
-    private void OnMouseEnter()
-    {
-        this.isActive = true;
-        if (isActive)
-        {
-            Debug.Log("isactive");
-            bringCardToFront();
-            transform.localScale = cardRenderScale*2;
-        }
-        
-        
-        
-    }
-    private void OnMouseExit()
-    {
-        if (isActive)
-        {
-            setCardToBack();
-            transform.localScale = cardRenderScale;
-            this.isActive = false;
-        }
-        
-
-    }
+   
     private void bringCardToFront()
     {
         
@@ -74,5 +52,28 @@ public class BaseCard : MonoBehaviour
     {
         cardRenderer.sortingOrder = 1;
     }
-    
+
+    void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
+    {
+        Debug.Log(1);
+        this.isActive = true;
+        if (isActive)
+        {
+            Debug.Log("isactive");
+            bringCardToFront();
+            transform.localScale = cardRenderScale * 2;
+        }
+        //throw new System.NotImplementedException();
+    }
+
+    void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
+    {
+        if (isActive)
+        {
+            setCardToBack();
+            transform.localScale = cardRenderScale;
+            this.isActive = false;
+        }
+        //throw new System.NotImplementedException();
+    }
 }

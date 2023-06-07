@@ -20,9 +20,10 @@ public class UnitManager : MonoBehaviour
     public BasePlayer spawnPlayer(string name)
     {
         var playerData = getUnitData<BasePlayer>(Faction.Player, name);
-        var player = Instantiate(playerData.unitPrefab);
+        var player = Instantiate(playerData.unitPrefab, GameManager.Instance.mainCanvas.transform);
         player.loadUnitData(playerData);
         player.transform.position = new Vector3(playerX, playerY, 0);
+        player.transform.localScale = new Vector3(5, 5, 0);
         return (BasePlayer)player;
     }
 
