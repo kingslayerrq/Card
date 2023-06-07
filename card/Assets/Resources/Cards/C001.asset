@@ -20,3 +20,5 @@ MonoBehaviour:
   cTarget: 1
   cPrefab: {fileID: 998305087772932483, guid: 693f5635ee9d17e47adaf95c6a663baf, type: 3}
   cStatus: 0
+  isShown: 0
+  curIndexInHand: 0

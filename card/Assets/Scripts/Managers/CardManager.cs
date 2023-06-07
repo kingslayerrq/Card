@@ -81,21 +81,10 @@ public class CardManager : MonoBehaviour
                 }
             }
         }
-        foreach(var card in handDeck)
-        {
-            card.transform.position = updateCardPos(card.curIndexInHand);
-        }
+        fitCards(handDeck);
     }
     
-    public void setCardSlotPos(int cardNum)
-    {
-        
-    }
-
-    public void fitCards()
-    {
-        
-    }
+    
     public void instantiateCardData(List<ScriptableCards> cardData)
     {
         //Debug.Log("inst");
@@ -134,8 +123,15 @@ public class CardManager : MonoBehaviour
             return new Vector3(x, y, z);
         }
         return new Vector3(1,1,1);
-        
+    }
 
+    // fit/updating each card's position
+    public void fitCards(List<BaseCard> cardList)
+    {
+        foreach (BaseCard card in cardList)
+        {
+            card.transform.position = updateCardPos(card.curIndexInHand);
+        }
     }
 
     public void discardCard(ScriptableCards discarded)

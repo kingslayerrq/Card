@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     
-    public static Vector3 cardRenderScale = new Vector3(0.2f, 0.2f, 0);
+    public static Vector3 cardRenderScale = new Vector3(10, 10, 0);
     protected ScriptableCards cardData;
     public string cId;
     public string cName;
@@ -26,7 +29,7 @@ public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private void Start()
     {
         
-        Renderer cardRenderer = cPrefab.transform.GetComponent<Renderer>();
+        cardRenderer = cPrefab.transform.GetComponent<Renderer>();
     }
     public void loadCardData(ScriptableCards cardData)
     {
@@ -57,7 +60,8 @@ public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         cardRenderer.sortingOrder = 1;
     }
-
+   
+    
     void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
         Debug.Log(1);
@@ -66,7 +70,7 @@ public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         {
             Debug.Log("isactive");
             bringCardToFront();
-            transform.localScale = cardRenderScale * 2;
+            transform.localScale = cardRenderScale * 2f;
         }
         //throw new System.NotImplementedException();
     }
