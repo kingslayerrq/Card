@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
-public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
 {
     
     public static Vector3 cardRenderScale = new Vector3(10, 10, 0);
@@ -23,13 +23,21 @@ public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public bool isActive;
     public int curIndexInHand;
     public CardSlot cSlot;
-    private Renderer cardRenderer;
-    
+    private SpriteRenderer cardRenderer;
+    private int initSibIndex;
+    private Vector3 startPos;
+    private Vector3 dragDiff;
+    private Collider2D collide;
+
+    private void Awake()
+    {
+        cardRenderer = GetComponent<SpriteRenderer>();
+        collide = GetComponent<Collider2D>();
+    }
 
     private void Start()
     {
         
-        cardRenderer = cPrefab.transform.GetComponent<Renderer>();
     }
     public void loadCardData(ScriptableCards cardData)
     {
@@ -45,30 +53,17 @@ public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         this.isActive = false;
         this.curIndexInHand = cardData.curIndexInHand;
         this.cSlot = cardData.cSlot;
-        this.cardRenderer = this.cPrefab.transform.GetComponent<Renderer>();
+
     }
 
-
-   
-    private void bringCardToFront()
-    {
-        
-        cardRenderer.sortingOrder = 999;
-    }
-
-    private void setCardToBack()
-    {
-        cardRenderer.sortingOrder = 1;
-    }
-   
     
+ 
     void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log(1);
+        Debug.Log("pointenter");
         this.isActive = true;
         if (isActive)
-        {
-            Debug.Log("isactive");
+        {     
             bringCardToFront();
             transform.localScale = cardRenderScale * 2f;
         }
@@ -77,12 +72,66 @@ public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
     {
+        Debug.Log("pointexit");
         if (isActive)
         {
-            setCardToBack();
+            restoreCardToBack();
             transform.localScale = cardRenderScale;
-            this.isActive = false;
+            isActive = false;
         }
         //throw new System.NotImplementedException();
     }
+
+
+
+    private void bringCardToFront()
+    {
+        initSibIndex = transform.GetSiblingIndex();
+        transform.SetAsLastSibling();
+        cardRenderer.sortingLayerName = "activeCards";
+        cardRenderer.sortingOrder = 999;
+    }
+
+    private void restoreCardToBack()
+    {
+        cardRenderer.sortingLayerName = "cards";
+        transform.SetSiblingIndex(initSibIndex);
+        cardRenderer.sortingOrder = 1;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        Debug.Log("begindrag");
+        GameManager.Instance.mainRaycaster.enabled = false;
+        dragDiff = Camera.main.ScreenToWorldPoint(Input.mousePosition) - cSlot.getCardSlotPos();
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        
+        
+
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        Debug.Log(cSlot.getCardSlotPos());
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        // maintain the difference between object and dragPostion
+        transform.position = mousePos - dragDiff;
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        Debug.Log("drop");
+        transform.position = cSlot.getCardSlotPos();
+        isActive = false;
+        GameManager.Instance.mainRaycaster.enabled = true;
+        dragDiff = new Vector3(0, 0);
+        restoreCardToBack();
+        transform.localScale = cardRenderScale;
+       
+    }
+
+    
 }
