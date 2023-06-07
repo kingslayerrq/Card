@@ -13,7 +13,9 @@ public class ScriptableCards : ScriptableObject
     public Target cTarget;
     public BaseCard cPrefab;
     public curStatus cStatus;
-    public bool isShown;
+    public bool isShown = false;
+    public int curIndexInHand;
+    public CardSlot cSlot = null;
 
 
 }

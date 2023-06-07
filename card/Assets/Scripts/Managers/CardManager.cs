@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 
 public class CardManager : MonoBehaviour
@@ -12,8 +13,9 @@ public class CardManager : MonoBehaviour
     private List<ScriptableCards> discardDeckData = new List<ScriptableCards>();
     private List<BaseCard> handDeck = new List<BaseCard>(); //contains basecard objects
     private Dictionary<ScriptableCards, int> cardDict;
-    [SerializeField] private int maxHandSize;
-    [SerializeField] private List<CardSlot> cardSlotPos;
+    [SerializeField] private int maxHandSize, curHandSize;
+    [SerializeField] private List<CardSlot> cardSlots = new List<CardSlot>();
+    
 
     private void Awake()
     {
@@ -21,13 +23,26 @@ public class CardManager : MonoBehaviour
 
         _cards = Resources.LoadAll<ScriptableCards>("Cards").ToList();
 
+        curHandSize = 0;
+
+        
+        for (int i = 0; i < maxHandSize; i++)
+        {
+            
+            var csInstance = new CardSlot(0, 0, i, true);
+            cardSlots.Add(csInstance);
+        }
+        
         //cardSlotPos = new List<Transform>(maxHandSize);
 
     }
 
     private void Update()
     {
+        
         instantiateCardData(handDeckData);
+
+        
     }
     // populate the drawPile
     public void initDrawPile()
@@ -39,11 +54,8 @@ public class CardManager : MonoBehaviour
                 var cardCopy = Instantiate(card);
                 availCards.Add(cardCopy);
                 cardCopy.cStatus = curStatus.inDraw;
-                
             }
         }
-        
-
     }
 
     // draw cardData to handDeckData
@@ -55,9 +67,12 @@ public class CardManager : MonoBehaviour
             {
                 var cardToDrawData = getRandomCardFromList<BaseCard>(availCards, curStatus.inDraw);
                 availCards.Remove(cardToDrawData);
+                
                 if (handDeckData.Count < maxHandSize)
                 {          
                     handDeckData.Add(cardToDrawData);
+                    curHandSize++;
+                    cardToDrawData.curIndexInHand = curHandSize - 1;         
                     cardToDrawData.cStatus = curStatus.inHand;     
                 }
                 else
@@ -65,8 +80,13 @@ public class CardManager : MonoBehaviour
                     discardCard(cardToDrawData);               
                 }
             }
-        }  
+        }
+        foreach(var card in handDeck)
+        {
+            card.transform.position = updateCardPos(card.curIndexInHand);
+        }
     }
+    
     public void setCardSlotPos(int cardNum)
     {
         
@@ -82,20 +102,40 @@ public class CardManager : MonoBehaviour
 
         if (cardData.Any())
         {
-            foreach (var card in cardData)
+            for (int i = 0; i < cardData.Count; i++)
             {
-                var cs = cardSlotPos.Where(cs=> cs.isEmpty).First();
-                var cardInstance = Instantiate(card.cPrefab, GameManager.Instance.mainCanvas.transform);
-                cardInstance.transform.position = cs.transform.position;
+                var cData = cardData[i];
+                var cs = cardSlots.Where(cs=> cs.isEmpty).First();
+                cs.setCardSlotPos(updateCardPos(cData.curIndexInHand));  // set cardSlot transform position
+                cs.setCSIndex(cData.curIndexInHand);                                  //set cardSlot(index) with the card's curIndex in hand
+                var cardInstance = Instantiate(cData.cPrefab, GameManager.Instance.mainCanvas.transform);
+                cardInstance.transform.position = cs.getCardSlotPos();
                 cardInstance.transform.localScale = new Vector3(10, 10, 0);
-                cs.isEmpty = false;
-                cardInstance.loadCardData(card);
+                cs.isEmpty = false;                                                   // update cardSlot.empty
+                cData.cSlot = cs;                                                     // set the card's cardSlot to cs
+                cardInstance.loadCardData(cData);
+                handDeck.Add(cardInstance);                                           // add to handdeck<BaseCard object>
                 cardInstance.isShown = true;
-                cardData.Remove(card);
+                cardData.Remove(cData);
             }
-            
         }
         
+    }
+    // return position nased on total handdeckdata number && the card's curindex;
+    public Vector3 updateCardPos(int curIndex)
+    {
+        
+        if (curHandSize!= 0)
+        {
+            float CardPosition = 16 / curHandSize;
+            float x = -14 + CardPosition / 2 + (curIndex) * CardPosition;
+            float y = 0;
+            float z = 0;
+            return new Vector3(x, y, z);
+        }
+        return new Vector3(1,1,1);
+        
+
     }
 
     public void discardCard(ScriptableCards discarded)

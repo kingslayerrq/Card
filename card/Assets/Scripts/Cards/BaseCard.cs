@@ -18,7 +18,10 @@ public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public BaseCard cPrefab;
     public bool isShown;                 // is displayed in hand?
     public bool isActive;
+    public int curIndexInHand;
+    public CardSlot cSlot;
     private Renderer cardRenderer;
+    
 
     private void Start()
     {
@@ -35,8 +38,10 @@ public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         this.cTarget = cardData.cTarget;
         this.cStatus = cardData.cStatus;
         this.cPrefab = cardData.cPrefab;
-        this.isShown = false;                             // update once shown
+        this.isShown = cardData.isShown;                             // update once shown
         this.isActive = false;
+        this.curIndexInHand = cardData.curIndexInHand;
+        this.cSlot = cardData.cSlot;
         this.cardRenderer = this.cPrefab.transform.GetComponent<Renderer>();
     }
 

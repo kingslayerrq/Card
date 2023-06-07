@@ -1530,6 +1530,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: cardSLot
       objectReference: {fileID: 0}
+    - target: {fileID: 7729192166941860428, guid: 6408a5d543738f74682769ead59f0229, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8416878259561546169, guid: 6408a5d543738f74682769ead59f0229, type: 3}
       propertyPath: xPos
       value: -15
