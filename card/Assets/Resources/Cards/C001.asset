@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac05b5c3d980c8948bd5f74beb09adc6, type: 3}
   m_Name: C001
   m_EditorClassIdentifier: 
-  cId: 001
+  cId: C001
   cName: Attack
   cDescription: Attack once
   cRarity: 0
   cType: 0
   cTarget: 1
-  cPrefab: {fileID: 998305087772932483, guid: 693f5635ee9d17e47adaf95c6a663baf, type: 3}
+  cPrefab: {fileID: -8878806358991000582, guid: 61d02671b5f0fce4fb6bd4d46803d5a5, type: 3}
   cStatus: 0
   isShown: 0
   curIndexInHand: 0

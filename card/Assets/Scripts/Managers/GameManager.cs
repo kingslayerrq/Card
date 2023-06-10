@@ -8,12 +8,11 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public Canvas mainCanvas;
-    public GraphicRaycaster mainRaycaster;
     public GameState gameState;
     private void Awake()
     {
         Instance = this;
-        mainRaycaster = mainCanvas.GetComponent<GraphicRaycaster>();
+        
         
     }
 
@@ -28,6 +27,7 @@ public class GameManager : MonoBehaviour
         {
             case GameState.initState:
                 UnitManager.Instance.spawnPlayer("Player01");
+                UnitManager.Instance.spawnEnemy("Enemy01");
                 CardManager.Instance.initDrawPile();
                 CardManager.Instance.drawCards(1);
                 
@@ -37,10 +37,11 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.drawState:
                 Debug.Log("drawstate");
-                CardManager.Instance.drawCards(2);
-                
+                CardManager.Instance.drawCards(4);
+                updateGameState(GameState.playerTurn);
                 break;
             case GameState.playerTurn:
+                Debug.Log("playerTurn");
                 break;
             case GameState.enemyTurn:
                 break;

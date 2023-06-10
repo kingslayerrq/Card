@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac05b5c3d980c8948bd5f74beb09adc6, type: 3}
   m_Name: C002
   m_EditorClassIdentifier: 
-  cId: 002
+  cId: C002
   cName: Heal
   cDescription: Heal yourself
   cRarity: 0
   cType: 1
   cTarget: 0
-  cPrefab: {fileID: 998305087772932483, guid: bae1b9c9388f78b41ae7d134e271e5d8, type: 3}
+  cPrefab: {fileID: -7784017588969519368, guid: d5e0b1e3dac5b904da3dc1fc117a3909, type: 3}
   cStatus: 0
   isShown: 0
   curIndexInHand: 0

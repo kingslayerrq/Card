@@ -15,7 +15,7 @@ public class ScriptableCards : ScriptableObject
     public curStatus cStatus;
     public bool isShown = false;
     public int curIndexInHand;
-    public CardSlot cSlot = null;
+    
 
 
 }
