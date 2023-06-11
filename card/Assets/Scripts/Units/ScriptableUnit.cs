@@ -13,7 +13,7 @@ public class ScriptableUnit : ScriptableObject
     public int curGauge;
     public int maxGauge;
     public bool isDead;
-
+    public UnitStatus unitStatus;
     
 }
 
@@ -22,5 +22,11 @@ public enum Faction
     Player = 0,
     Enemy = 1,
     Ally = 2
+}
+public enum UnitStatus
+{
+    None = 0,
+    PowerUp = 1,
+    bleed = 2
 }
 

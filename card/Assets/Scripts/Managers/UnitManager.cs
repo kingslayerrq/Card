@@ -27,7 +27,7 @@ public class UnitManager : MonoBehaviour
     {
         var playerData = getUnitData<BasePlayer>(Faction.Player, name);
         var player = Instantiate(playerData.unitPrefab, playerPanel);
-        player.loadUnitData(playerData);
+        //player.loadUnitData(playerData);
         curPLayer = (BasePlayer)player;
         return curPLayer;
     }
@@ -37,7 +37,7 @@ public class UnitManager : MonoBehaviour
     {
         var enemyData = getUnitData<BaseEnemy>(Faction.Enemy, name);
         var enemy = Instantiate(enemyData.unitPrefab, enemyPanel);
-        enemy.loadUnitData(enemyData);
+        //enemy.loadUnitData(enemyData);
         curEnemy = (BaseEnemy)enemy;
         return (BaseEnemy)enemy;    
     }

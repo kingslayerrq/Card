@@ -570,10 +570,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 41869628}
-        m_TargetAssemblyTypeName: CardManager, Assembly-CSharp
-        m_MethodName: drawCards
-        m_Mode: 3
+      - m_Target: {fileID: 948249172}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: endTurn
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -654,7 +654,7 @@ GameObject:
   - component: {fileID: 684313759}
   m_Layer: 5
   m_Name: MCPos
-  m_TagString: Untagged
+  m_TagString: PlayerPanel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -774,6 +774,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCanvas: {fileID: 1308534303}
   gameState: 0
+  GameTurn: 0
 --- !u!224 &948249173
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1206,7 +1207,7 @@ GameObject:
   - component: {fileID: 1718757526}
   m_Layer: 5
   m_Name: EnemyPos
-  m_TagString: Untagged
+  m_TagString: EnemyPanel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

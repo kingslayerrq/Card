@@ -30,6 +30,6 @@ public class EnemyInteract : Droppable, IPointerEnterHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("enter");
+        //Debug.Log("enter");
     }
 }
