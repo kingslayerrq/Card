@@ -13,6 +13,7 @@ public class BaseUnit : MonoBehaviour
     public UnitStatus unitStatus;
     public ScriptableUnit unitData;
 
+    public EnergyBar energyBar;
     public HealthBar healthBar;
     
 

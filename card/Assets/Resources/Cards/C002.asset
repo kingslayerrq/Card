@@ -15,6 +15,7 @@ MonoBehaviour:
   cId: C002
   cName: Heal
   cDescription: Heal yourself
+  cCost: 1
   cRarity: 0
   cType: 1
   cTarget: 0

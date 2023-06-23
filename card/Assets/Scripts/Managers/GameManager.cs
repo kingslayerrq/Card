@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,15 +12,22 @@ public class GameManager : MonoBehaviour
     public GameState gameState;
     public static event Action<GameState> onGameStateChanged;
     public int GameTurn;
+    public BasePlayer activePlayer;
+    public BaseUnit _winner = null;
+
+    
+
     private void Awake()
     {
         Instance = this;
         GameTurn = 0;
+        
     }
 
     private void Start()
     {
         updateGameState(GameState.initState);
+           
     }
     public void updateGameState(GameState newState)
     {
@@ -47,14 +55,19 @@ public class GameManager : MonoBehaviour
             case GameState.enemyTurn:
                 Debug.Log("enemyturn");
                 break;
+            case GameState.resultState:
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
         }
         onGameStateChanged?.Invoke(newState);
     }
 
+   
+
     public void endTurn()
     {
+        Debug.Log("isclicked");
         if (gameState == GameState.playerTurn)
         {
             updateGameState(GameState.enemyTurn);
@@ -74,5 +87,6 @@ public enum GameState
     drawState = 1,
     checkState = 2,
     playerTurn = 3,
-    enemyTurn = 4
+    enemyTurn = 4,
+    resultState = 5
 }

@@ -13,8 +13,8 @@ public class C002 : BaseCard
     }
     public override void use(BaseUnit player)
     {
-        Debug.Log("previous health: " + player.curHealth);
+        //Debug.Log("previous health: " + player.curHealth);
         player.curHealth = Mathf.Min(player.curHealth + healNum, player.unitHealth);
-        Debug.Log("After healing: " + player.curHealth);
+        //Debug.Log("After healing: " + player.curHealth);
     }
 }

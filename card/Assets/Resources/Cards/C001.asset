@@ -15,6 +15,7 @@ MonoBehaviour:
   cId: C001
   cName: Attack
   cDescription: Attack once
+  cCost: 1
   cRarity: 0
   cType: 0
   cTarget: 1

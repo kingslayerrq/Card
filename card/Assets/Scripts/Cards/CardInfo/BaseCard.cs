@@ -14,6 +14,7 @@ public class BaseCard : MonoBehaviour
     public string cId;
     public string cName;
     public string cDescription;
+    public int cCost;
     public Rarity cRarity;
     public Type cType;
     public Target cTarget;
@@ -33,6 +34,7 @@ public class BaseCard : MonoBehaviour
         this.cId = cardData.cId;
         this.cName = cardData.cName;
         this.cDescription = cardData.cDescription;
+        this.cCost = cardData.cCost;
         this.cRarity = cardData.cRarity;
         this.cType = cardData.cType;
         this.cTarget = cardData.cTarget;
@@ -46,10 +48,7 @@ public class BaseCard : MonoBehaviour
     }
 
    
-    public virtual BaseCard inst()
-    {
-        return null;
-    }
+    
     
 
     public virtual void use(BaseUnit unit)

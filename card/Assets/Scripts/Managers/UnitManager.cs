@@ -14,6 +14,8 @@ public class UnitManager : MonoBehaviour
     public BasePlayer curPLayer;
     public BaseEnemy curEnemy;
 
+    public List<BasePlayer> availPlayers;
+    public List<BaseEnemy> availEnemies;
 
     void Awake()
     {
@@ -29,6 +31,8 @@ public class UnitManager : MonoBehaviour
         var player = Instantiate(playerData.unitPrefab, playerPanel);
         //player.loadUnitData(playerData);
         curPLayer = (BasePlayer)player;
+        GameManager.Instance.activePlayer = curPLayer;
+        availPlayers.Add(curPLayer);
         return curPLayer;
     }
 
@@ -39,6 +43,7 @@ public class UnitManager : MonoBehaviour
         var enemy = Instantiate(enemyData.unitPrefab, enemyPanel);
         //enemy.loadUnitData(enemyData);
         curEnemy = (BaseEnemy)enemy;
+        availEnemies.Add(curEnemy);
         return (BaseEnemy)enemy;    
     }
 

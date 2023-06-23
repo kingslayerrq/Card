@@ -87,7 +87,7 @@ public class Enemy01 : BaseEnemy
         healedLastTurn = false;
         Debug.Log("attacking" + unit.unitName);
         unit.curHealth -= atkPower;
-
+        
         
     }
 
@@ -96,6 +96,7 @@ public class Enemy01 : BaseEnemy
     {
         Debug.Log("Healing" + unit.unitName);
         unit.curHealth = Mathf.Min(unit.curHealth + healNum, unit.unitHealth);
+        healedLastTurn = true;
         
     }
     private void powerUp()

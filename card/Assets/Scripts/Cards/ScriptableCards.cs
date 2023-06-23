@@ -8,6 +8,7 @@ public class ScriptableCards : ScriptableObject
     public string cId;
     public string cName;
     public string cDescription;
+    public int cCost;
     public Rarity cRarity;
     public Type cType;
     public Target cTarget;

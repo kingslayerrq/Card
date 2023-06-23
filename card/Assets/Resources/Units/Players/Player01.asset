@@ -16,7 +16,8 @@ MonoBehaviour:
   unitFaction: 0
   unitName: Player01
   unitHealth: 10
-  curHealth: 2
-  curGauge: 0
-  maxGauge: 5
+  curHealth: 10
+  curGauge: 3
+  maxGauge: 3
   isDead: 0
+  unitStatus: 0

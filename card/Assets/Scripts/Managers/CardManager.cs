@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.ShaderKeywordFilter;
+//using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
-using UnityEngine.Rendering;
+//using UnityEngine.Rendering;
 using UnityEngine.UI;
+using UnityEngine.Pool;
 
 public class CardManager : MonoBehaviour
 {
@@ -14,7 +15,8 @@ public class CardManager : MonoBehaviour
     private List<ScriptableCards> availCards = new List<ScriptableCards>();
     private List<ScriptableCards> discardDeckData = new List<ScriptableCards>();
     public List<CardAndData> handCardAndData = new List<CardAndData>();
-    
+    private ObjectPool<BaseCard> cardPool;
+
     [SerializeField] private int maxHandSize, curHandSize;
 
     [SerializeField] private float destroyDelay = 2f;
@@ -29,8 +31,22 @@ public class CardManager : MonoBehaviour
         _cards = Resources.LoadAll<ScriptableCards>("Cards").ToList();
 
         curHandSize = 0;
-
-        
+        #region CardPool
+        cardPool = new ObjectPool<BaseCard>(() =>
+        {
+            Debug.Log("no card in pool");
+            return null;
+        }, bc =>
+        {
+            bc.gameObject.SetActive(true);
+        }, bc =>
+        {
+            bc.gameObject.SetActive(false);
+        }, bc =>
+        {
+            Destroy(bc.gameObject);
+        }, false, 20, 30);                                                                      // default size, max size of array
+        #endregion
     }
 
     private void Update()
@@ -43,7 +59,8 @@ public class CardManager : MonoBehaviour
     // populate the drawPile
     public void initDrawPile()
     {
-        foreach(ScriptableCards card in _cards)
+ 
+        foreach (ScriptableCards card in _cards)
         {
             for (int i = 0; i < 6 - (int)card.cRarity; i++)     // for now have (5-rarity)# copies of cards
             {
@@ -56,8 +73,7 @@ public class CardManager : MonoBehaviour
 
     // draw cardData to handDeckData
     public void drawCards(int num)
-    {
-        
+    { 
         for (int i = 0; i < num; i++)
         {
             var cardToDrawData = getRandomCardFromList<BaseCard>(availCards, curStatus.inDraw);
@@ -71,7 +87,6 @@ public class CardManager : MonoBehaviour
                     cardToDrawData.curIndexInHand = curHandSize - 1;
                     cardToDrawData.cStatus = curStatus.inHand;
                     handCardAndData.Add(cd);
-
                 }
                 else
                 {
@@ -106,16 +121,27 @@ public class CardManager : MonoBehaviour
     }
 
 
-    // just destroying card basically
-    public void dealCard(BaseCard cardDealt)
+    
+    public void dealCard(BaseCard cardDealt, BaseUnit target)
     {
-        var card = handCardAndData.Find(cd => cd.getCard().Equals(cardDealt));
-        if (card != null)
+        if (GameManager.Instance.activePlayer.curGauge >= cardDealt.cCost)
         {
-            Debug.Log("dealt");
+            cardDealt.use(target);
+            GameManager.Instance.activePlayer.curGauge -= cardDealt.cCost;
             curHandSize--;
             discardCard(handCardAndData, cardDealt);
         }
+        else
+        {
+            Debug.Log("doesn't have enough energy");
+        }
+        //var card = handCardAndData.Find(cd => cd.getCard().Equals(cardDealt));
+        //if (card != null)
+        //{
+            //Debug.Log("dealt");
+            //curHandSize--;
+            //discardCard(handCardAndData, cardDealt);
+        //}
  
     }
 
@@ -131,7 +157,6 @@ public class CardManager : MonoBehaviour
                 shuffleFrom.Remove(c);
                 shuffleInto.Add(c);
             }
-            
         }
         Debug.Log("shuffled");
     }
@@ -175,5 +200,10 @@ public class CardManager : MonoBehaviour
         return cardList.Where(c=> c.cStatus == cardStatus).OrderBy(o => UnityEngine.Random.value).FirstOrDefault();
     }
 
+    #region CardPool Methods
+
+
     
+    #endregion
+
 }

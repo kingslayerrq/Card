@@ -8,23 +8,21 @@ public class BaseEnemy : BaseUnit
 {
     protected Target target;
     protected BaseUnit targetUnit;
-    public Transform playerPanel;
-    protected BasePlayer[] availFoes ;
+    //public Transform playerPanel;
+    protected List<BasePlayer> availFoes ;
 
     private void Awake()
     {
         target = Target.None;
         targetUnit = null;
         loadUnitData(unitData);
-        Debug.Log(unitData.unitName);
         healthBar = GetComponentInChildren<HealthBar>();
         healthBar.setMaxHealth(unitHealth);
         healthBar.setHealth(curHealth);
+        //playerPanel = UnitManager.Instance.playerPanel;
 
-        Debug.Log(curHealth);
-        playerPanel = UnitManager.Instance.playerPanel;
-
-        availFoes = playerPanel.GetComponentsInChildren<BasePlayer>().Where(p => !p.isDead).ToArray();        //load available foes
+        //availFoes = playerPanel.GetComponentsInChildren<BasePlayer>().Where(p => !p.isDead).ToArray();        //load available foes
+        availFoes = UnitManager.Instance.availPlayers;
         GameManager.onGameStateChanged += enemyAction;
 
     }
@@ -46,8 +44,15 @@ public class BaseEnemy : BaseUnit
         isDead = curHealth > 0 ? false : true;
         if (isDead)
         {
+            UnitManager.Instance.availEnemies.Remove(this);
             Debug.Log("Enemy destroyed");
             Destroy(this.gameObject);
+            Debug.Log(UnitManager.Instance.availEnemies.Count);
+            if (UnitManager.Instance.availEnemies.Count == 0)
+            {
+                GameManager.Instance._winner = GameManager.Instance.activePlayer;
+                GameManager.Instance.updateGameState(GameState.resultState);
+            }
         }
     }
     private void enemyAction(GameState state)

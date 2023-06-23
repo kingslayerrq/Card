@@ -19,13 +19,15 @@ public class PlayerInteract : Droppable
         BaseCard card = c.GetComponent<BaseCard>();
         if (card.cTarget == Target.Self)
         {
-            card.use(curPlayer);
-            CardManager.Instance.dealCard(card);
+            //card.use(curPlayer);
+            
+            CardManager.Instance.dealCard(card, curPlayer);
         }
         else
         {
             Debug.Log("Not a valid card to use on Player!");
         }
+        
     }
 
     

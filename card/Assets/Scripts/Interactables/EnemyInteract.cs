@@ -19,8 +19,8 @@ public class EnemyInteract : Droppable, IPointerEnterHandler
 
         if (card.cTarget == Target.Enemy)
         {
-            card.use(curEnemy);
-            CardManager.Instance.dealCard(card);
+            
+            CardManager.Instance.dealCard(card, curEnemy);
         }
         else
         {
