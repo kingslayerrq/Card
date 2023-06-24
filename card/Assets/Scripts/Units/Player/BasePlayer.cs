@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -43,6 +44,7 @@ public class BasePlayer : BaseUnit
         {
             Debug.Log("destroyed");
             UnitManager.Instance.availPlayers.Remove(this);
+            this.DOKill();
             Destroy(this.gameObject);
             if (UnitManager.Instance.availPlayers.Count == 0)
             {

@@ -92,16 +92,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c55cfd6bbe71bfa42b77d501ccd832c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardData: {fileID: 0}
   cId: 
   cName: 
   cDescription: 
+  cCost: 0
   cRarity: 0
   cType: 0
   cTarget: 0
   cStatus: 0
   cPrefab: {fileID: 0}
   isShown: 0
-  isActive: 0
+  isCurCard: 0
   curIndexInHand: 0
   healNum: 2
 --- !u!114 &5472179497303356319
@@ -131,8 +133,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 200
-  m_MinHeight: 300
+  m_MinWidth: -1
+  m_MinHeight: -1
   m_PreferredWidth: 100
   m_PreferredHeight: 150
   m_FlexibleWidth: -1

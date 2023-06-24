@@ -7,6 +7,8 @@ using UnityEngine;
 //using UnityEngine.Rendering;
 using UnityEngine.UI;
 using UnityEngine.Pool;
+using DG.Tweening;
+using System.Threading.Tasks;
 
 public class CardManager : MonoBehaviour
 {
@@ -17,11 +19,13 @@ public class CardManager : MonoBehaviour
     public List<CardAndData> handCardAndData = new List<CardAndData>();
     private ObjectPool<BaseCard> cardPool;
 
+    [SerializeField] private Transform initCardShow;
+    [SerializeField] private Transform nextCardShow;
     [SerializeField] private int maxHandSize, curHandSize;
 
     [SerializeField] private float destroyDelay = 2f;
     public Transform playerHand;                         // playerhand panel
-    public Transform p;                                  // panel for discarded card/ burnt card
+    public Transform discardPanel;                                  // panel for discarded card/ burnt card
     
         
     private void Awake()
@@ -49,13 +53,7 @@ public class CardManager : MonoBehaviour
         #endregion
     }
 
-    private void Update()
-    {
-        
-        instantiateCardData(handCardAndData);
-
-        
-    }
+    
     // populate the drawPile
     public void initDrawPile()
     {
@@ -72,36 +70,87 @@ public class CardManager : MonoBehaviour
     }
 
     // draw cardData to handDeckData
-    public void drawCards(int num)
-    { 
-        for (int i = 0; i < num; i++)
+    public async Task drawCards(int num)
+    {
+        var drawed = availCards.Count;
+        if (num <= availCards.Count)
         {
-            var cardToDrawData = getRandomCardFromList<BaseCard>(availCards, curStatus.inDraw);
-            if (cardToDrawData != null)
+            for (int i = 0; i < num; i++)
             {
-                availCards.Remove(cardToDrawData);
-                if (handCardAndData.Count < maxHandSize)
+                var cardToDrawData = getRandomCardFromList<BaseCard>(availCards, curStatus.inDraw);
+                if (cardToDrawData != null)
                 {
-                    CardAndData cd = new CardAndData(null, cardToDrawData);
-                    curHandSize = curHandSize < maxHandSize ? curHandSize + 1 : maxHandSize;
-                    cardToDrawData.curIndexInHand = curHandSize - 1;
-                    cardToDrawData.cStatus = curStatus.inHand;
-                    handCardAndData.Add(cd);
-                }
-                else
-                {
-                    discardCard(cardToDrawData);
+                    availCards.Remove(cardToDrawData);
+                    if (handCardAndData.Count < maxHandSize)
+                    {
+                        CardAndData cd = new CardAndData(null, cardToDrawData);
+                        curHandSize = curHandSize < maxHandSize ? curHandSize + 1 : maxHandSize;
+                        cardToDrawData.curIndexInHand = curHandSize - 1;
+                        cardToDrawData.cStatus = curStatus.inHand;
+                        handCardAndData.Add(cd);
+                        await showCardAnim(cd);
+                    }
+                    else
+                    {
+                        await discardAnim(cardToDrawData);
+                    }
                 }
             }
-            else
-            {
-                int needToDrawMore = num - i;
-                shuffleCard(discardDeckData, availCards);
-                drawCards(needToDrawMore);
-                return;
-            }
-            
         }
+        else
+        {
+            shuffleCard(discardDeckData, availCards);
+            for (int i = 0; i < num - drawed; i++)
+            {
+                var cardToDrawData = getRandomCardFromList<BaseCard>(availCards, curStatus.inDraw);
+                if (cardToDrawData != null)
+                {
+                    availCards.Remove(cardToDrawData);
+                    if (handCardAndData.Count < maxHandSize)
+                    {
+                        CardAndData cd = new CardAndData(null, cardToDrawData);
+                        curHandSize = curHandSize < maxHandSize ? curHandSize + 1 : maxHandSize;
+                        cardToDrawData.curIndexInHand = curHandSize - 1;
+                        cardToDrawData.cStatus = curStatus.inHand;
+                        handCardAndData.Add(cd);
+                        await showCardAnim(cd);
+                    }
+                    else
+                    {
+                        await discardAnim(cardToDrawData);
+                    }
+                }
+            }
+        }
+        //for (int i = 0; i < num; i++)
+        //{
+        //    var cardToDrawData = getRandomCardFromList<BaseCard>(availCards, curStatus.inDraw);
+        //    if (cardToDrawData != null)
+        //    {
+        //        availCards.Remove(cardToDrawData);
+        //        if (handCardAndData.Count < maxHandSize)
+        //        {
+        //            CardAndData cd = new CardAndData(null, cardToDrawData);
+        //            curHandSize = curHandSize < maxHandSize ? curHandSize + 1 : maxHandSize;
+        //            cardToDrawData.curIndexInHand = curHandSize - 1;
+        //            cardToDrawData.cStatus = curStatus.inHand;
+        //            handCardAndData.Add(cd);
+        //            await showCardAnim(cd);
+        //        }
+        //        else
+        //        {
+        //            discardCard(cardToDrawData);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        int needToDrawMore = num - i;
+        //        shuffleCard(discardDeckData, availCards);
+        //        drawCards(needToDrawMore);
+                
+        //    } 
+        //}
+        //await Task.Yield ();
 
     }
     
@@ -112,15 +161,37 @@ public class CardManager : MonoBehaviour
         var cardNotInstantiated = cardAndData.Find(cd => cd.getCard() == null);
         if (cardNotInstantiated != null)                                                  // if there's still card not instantiated
         {
-            var cardInstance = Instantiate(cardNotInstantiated.getCardData().cPrefab, playerHand);
-            cardNotInstantiated.getCardData().isShown = true;
-            cardInstance.loadCardData(cardNotInstantiated.getCardData());
-            cardNotInstantiated.setCard(cardInstance);
+            //var cardInstance = Instantiate(cardNotInstantiated.getCardData().cPrefab, initCardShow);
+            //cardInstance.transform.localScale = Vector3.zero;
+            
+            
+            //cardNotInstantiated.getCardData().isShown = true;
+            //cardInstance.loadCardData(cardNotInstantiated.getCardData());
+            //cardNotInstantiated.setCard(cardInstance);
+
+            //StartCoroutine(showCardAnim(cardNotInstantiated));
         }
         
     }
 
+    private async Task showCardAnim(CardAndData cd)
+    {
+        var card = Instantiate(cd.getCardData().cPrefab, initCardShow);
+        cd.getCardData().isShown = true;
+        card.loadCardData(cd.getCardData());
+        cd.setCard(card);
+        card.transform.localScale = Vector3.zero;
+        card.transform.DOScale(new Vector3(2,2,2), 0.5f);
+        
+        await card.transform.DOMove(nextCardShow.position, 1f).SetEase(Ease.OutQuart).OnComplete(() =>
+        {
+            //await Task.Delay(100);
+            card.transform.DOScale(Vector3.one, 0.1f);
+            card.transform.SetParent(playerHand, false);
 
+        }).AsyncWaitForCompletion();
+        
+    }
     
     public void dealCard(BaseCard cardDealt, BaseUnit target)
     {
@@ -166,8 +237,24 @@ public class CardManager : MonoBehaviour
     {
         discarded.cStatus = curStatus.inDiscard;
         discardDeckData.Add(discarded);
-        var dc = Instantiate(discarded.cPrefab, p);
+        var dc = Instantiate(discarded.cPrefab, discardPanel);
         StartCoroutine(DestroyAfterDelayCoroutine(dc, destroyDelay));
+    }
+
+    private async Task discardAnim(ScriptableCards dc)
+    {
+        discardDeckData.Add(dc);
+        var card = Instantiate(dc.cPrefab, initCardShow);
+        dc.cStatus = curStatus.inDiscard;
+        card.transform.localScale = Vector3.zero;
+        card.transform.DOScale(new Vector3(2, 2, 2), 0.1f);
+        Debug.Log(card.transform.parent);
+        await card.transform.DOMove(nextCardShow.position, 1f).SetEase(Ease.OutQuart).AsyncWaitForCompletion();
+        //card.transform.DOMove()
+        //card.transform.SetParent(discardPanel,false);
+        await Task.Delay(1000);
+        card.transform.DOKill();
+        Destroy(card.gameObject);
     }
 
     IEnumerator DestroyAfterDelayCoroutine(BaseCard obj, float delay)

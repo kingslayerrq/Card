@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,7 +30,7 @@ public class GameManager : MonoBehaviour
         updateGameState(GameState.initState);
            
     }
-    public void updateGameState(GameState newState)
+    public async void updateGameState(GameState newState)
     {
         gameState = newState;
         switch (newState)
@@ -38,7 +39,8 @@ public class GameManager : MonoBehaviour
                 UnitManager.Instance.spawnPlayer("Player01");
                 UnitManager.Instance.spawnEnemy("Enemy01");
                 CardManager.Instance.initDrawPile();
-                CardManager.Instance.drawCards(2);
+                await CardManager.Instance.drawCards(2);
+                
                 updateGameState(GameState.drawState);
                 break;
             case GameState.checkState:
@@ -46,7 +48,7 @@ public class GameManager : MonoBehaviour
             case GameState.drawState:
                 GameTurn++;                            // drawState signals a new turn
                 Debug.Log("drawstate");
-                CardManager.Instance.drawCards(2);
+                await CardManager.Instance.drawCards(2);
                 updateGameState(GameState.playerTurn);
                 break;
             case GameState.playerTurn:

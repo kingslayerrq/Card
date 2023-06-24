@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -46,6 +47,7 @@ public class BaseEnemy : BaseUnit
         {
             UnitManager.Instance.availEnemies.Remove(this);
             Debug.Log("Enemy destroyed");
+            this.DOKill();
             Destroy(this.gameObject);
             Debug.Log(UnitManager.Instance.availEnemies.Count);
             if (UnitManager.Instance.availEnemies.Count == 0)

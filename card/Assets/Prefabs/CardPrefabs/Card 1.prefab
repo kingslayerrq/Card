@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 5472179497303356319}
   - component: {fileID: 646664046699975799}
   - component: {fileID: -6860562371351633846}
-  - component: {fileID: -8228869946338691586}
   m_Layer: 5
   m_Name: Card 1
   m_TagString: Untagged
@@ -97,6 +96,7 @@ MonoBehaviour:
   cId: 
   cName: 
   cDescription: 
+  cCost: 0
   cRarity: 0
   cType: 0
   cTarget: 0
@@ -133,10 +133,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 200
-  m_MinHeight: 300
-  m_PreferredWidth: 100
-  m_PreferredHeight: 150
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -152,17 +152,3 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &-8228869946338691586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6364974499725960753}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AspectMode: 0
-  m_AspectRatio: 1

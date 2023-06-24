@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,39 +7,41 @@ using UnityEngine;
 
 public class Enemy01 : BaseEnemy
 {
-    [SerializeField] int atkPower = 2;
-    [SerializeField] int powerUpValue = 1;
+    [SerializeField] private int atkPower = 1;
+    [SerializeField] private int powerUpValue = 1;
     private bool healedLastTurn = false;
-    [SerializeField] int healNum = 2;
+    [SerializeField] private int healNum = 2;
     private bool isPoweringUp = false;
-    [SerializeField] int powerUpTurn;
-    
+    [SerializeField] private int powerUpTurn;
+    [SerializeField] private Transform parentToReturn;
     private void Start()
     {
         powerUpTurn = 0;
+        parentToReturn = this.transform.parent;
         
     }
     protected override void takeAction()
     {
         Debug.Log("taking action");
         // increase atkpower if ispowerup
-        if (isPoweringUp)
-        {
-            powerUp();
-        }
-        targetUnit = selectTarget();
-        switch(target)
-        {
-            case Target.Self:
-                handleActionOnSelf();
-                break;
-            case Target.Player:
-                attack(targetUnit);
-                break;
-            default:
-                break;
 
-        }
+        //if (isPoweringUp)
+        //{
+        //    powerUp();
+        //}
+        //targetUnit = selectTarget();
+        //switch (target)
+        //{
+        //    case Target.Self:
+        //        handleActionOnSelf();
+        //        break;
+        //    case Target.Player:
+        //        attack(targetUnit);
+        //        break;
+        //    default:
+        //        break;
+
+        //}
 
         endTurnForEnemy();
         
@@ -86,12 +89,18 @@ public class Enemy01 : BaseEnemy
     {
         healedLastTurn = false;
         Debug.Log("attacking" + unit.unitName);
+        doAtkAnim(this, unit);
         unit.curHealth -= atkPower;
         
         
     }
 
-  
+    private void doAtkAnim(BaseEnemy attacker, BaseUnit target)
+    { 
+        var duration = 1f;
+        attacker.transform.parent.DOPunchPosition(target.transform.parent.position, duration, vibrato: 5, elasticity: 0) ;
+    }
+
     private void heal(BaseUnit unit)
     {
         Debug.Log("Healing" + unit.unitName);
