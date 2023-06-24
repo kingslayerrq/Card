@@ -45,7 +45,7 @@ public class BasePlayer : BaseUnit
             Debug.Log("destroyed");
             UnitManager.Instance.availPlayers.Remove(this);
             this.DOKill();
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             if (UnitManager.Instance.availPlayers.Count == 0)
             {
                 GameManager.Instance.updateGameState(GameState.resultState);

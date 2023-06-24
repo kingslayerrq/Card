@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Enemy01 : BaseEnemy
@@ -20,30 +21,31 @@ public class Enemy01 : BaseEnemy
         parentToReturn = this.transform.parent;
         
     }
-    protected override void takeAction()
+    protected override async void  takeAction()
     {
         Debug.Log("taking action");
         // increase atkpower if ispowerup
 
-        //if (isPoweringUp)
-        //{
-        //    powerUp();
-        //}
-        //targetUnit = selectTarget();
-        //switch (target)
-        //{
-        //    case Target.Self:
-        //        handleActionOnSelf();
-        //        break;
-        //    case Target.Player:
-        //        attack(targetUnit);
-        //        break;
-        //    default:
-        //        break;
+        if (isPoweringUp)
+        {
+            powerUp();
+        }
+        targetUnit = selectTarget();
+        switch (target)
+        {
+            case Target.Self:
+                handleActionOnSelf();
+                break;
+            case Target.Player:
+                await attack(targetUnit);
+                break;
+            default:
+                break;
 
-        //}
+        }
 
         endTurnForEnemy();
+        
         
 
     }
@@ -85,20 +87,21 @@ public class Enemy01 : BaseEnemy
 
     }
 
-    private void attack(BaseUnit unit)
+    private async Task attack(BaseUnit unit)
     {
         healedLastTurn = false;
         Debug.Log("attacking" + unit.unitName);
-        doAtkAnim(this, unit);
+        await doAtkAnim(this, unit);
         unit.curHealth -= atkPower;
         
         
     }
 
-    private void doAtkAnim(BaseEnemy attacker, BaseUnit target)
+    private async Task doAtkAnim(BaseEnemy attacker, BaseUnit target)
     { 
         var duration = 1f;
         attacker.transform.parent.DOPunchPosition(target.transform.parent.position, duration, vibrato: 5, elasticity: 0) ;
+        await Task.Yield();
     }
 
     private void heal(BaseUnit unit)

@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 public class CardInteract : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
-    private int siblingIndex;
+    private int origSibIndex;
     public Transform parentToReturn = null;                      // for drag and drop return
     private Vector3 dragDiff;
     [SerializeField] private Vector3 enlargeratio;
@@ -19,10 +19,8 @@ public class CardInteract : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private BaseCard card;
     [SerializeField] private Transform _hand;
     
-    private Vector3 origPos;
-    private int origSibIndex;
-    private Transform origParent;                                // for hover return
-    private bool activeCard = false;
+    
+    
     private void Awake()
     {
         //RectTransform rectTransform = GetComponent<RectTransform>();

@@ -17,13 +17,13 @@ public class CardManager : MonoBehaviour
     private List<ScriptableCards> availCards = new List<ScriptableCards>();
     private List<ScriptableCards> discardDeckData = new List<ScriptableCards>();
     public List<CardAndData> handCardAndData = new List<CardAndData>();
-    private ObjectPool<BaseCard> cardPool;
+    //private ObjectPool<BaseCard> cardPool;
 
     [SerializeField] private Transform initCardShow;
     [SerializeField] private Transform nextCardShow;
     [SerializeField] private int maxHandSize, curHandSize;
 
-    [SerializeField] private float destroyDelay = 2f;
+    
     public Transform playerHand;                         // playerhand panel
     public Transform discardPanel;                                  // panel for discarded card/ burnt card
     
@@ -35,22 +35,7 @@ public class CardManager : MonoBehaviour
         _cards = Resources.LoadAll<ScriptableCards>("Cards").ToList();
 
         curHandSize = 0;
-        #region CardPool
-        cardPool = new ObjectPool<BaseCard>(() =>
-        {
-            Debug.Log("no card in pool");
-            return null;
-        }, bc =>
-        {
-            bc.gameObject.SetActive(true);
-        }, bc =>
-        {
-            bc.gameObject.SetActive(false);
-        }, bc =>
-        {
-            Destroy(bc.gameObject);
-        }, false, 20, 30);                                                                      // default size, max size of array
-        #endregion
+        
     }
 
     
@@ -200,6 +185,7 @@ public class CardManager : MonoBehaviour
             cardDealt.use(target);
             GameManager.Instance.activePlayer.curGauge -= cardDealt.cCost;
             curHandSize--;
+            cardDealt.transform.DOKill();                                                           //kill the tween before destroy the obj
             discardCard(handCardAndData, cardDealt);
         }
         else
@@ -233,13 +219,7 @@ public class CardManager : MonoBehaviour
     }
     
 
-    public void discardCard(ScriptableCards discarded)
-    {
-        discarded.cStatus = curStatus.inDiscard;
-        discardDeckData.Add(discarded);
-        var dc = Instantiate(discarded.cPrefab, discardPanel);
-        StartCoroutine(DestroyAfterDelayCoroutine(dc, destroyDelay));
-    }
+   
 
     private async Task discardAnim(ScriptableCards dc)
     {
@@ -257,12 +237,7 @@ public class CardManager : MonoBehaviour
         Destroy(card.gameObject);
     }
 
-    IEnumerator DestroyAfterDelayCoroutine(BaseCard obj, float delay)
-    {
-        Debug.Log("handfull...destroying");
-        yield return new WaitForSeconds(delay);
-        Destroy(obj.gameObject);
-    }
+    
 
     public void discardCard(List<CardAndData> cdList, BaseCard card)
     {
@@ -270,8 +245,8 @@ public class CardManager : MonoBehaviour
         if (cd != null)
         {
             cd.getCardData().cStatus = curStatus.inDiscard;                           // set the carddata to inDiscard, card obj will be destroyed
-            
             discardDeckData.Add(cd.getCardData());
+            
             Destroy(card.gameObject);
             cdList.Remove(cd);
 

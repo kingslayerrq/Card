@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
                 updateGameState(GameState.drawState);
                 break;
             case GameState.checkState:
+                //updateGameState(GameState.drawState);
                 break;
             case GameState.drawState:
                 GameTurn++;                            // drawState signals a new turn

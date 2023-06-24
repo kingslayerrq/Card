@@ -48,8 +48,8 @@ public class BaseEnemy : BaseUnit
             UnitManager.Instance.availEnemies.Remove(this);
             Debug.Log("Enemy destroyed");
             this.DOKill();
-            Destroy(this.gameObject);
-            Debug.Log(UnitManager.Instance.availEnemies.Count);
+            Destroy(gameObject);
+            //Debug.Log(UnitManager.Instance.availEnemies.Count);
             if (UnitManager.Instance.availEnemies.Count == 0)
             {
                 GameManager.Instance._winner = GameManager.Instance.activePlayer;
@@ -57,11 +57,12 @@ public class BaseEnemy : BaseUnit
             }
         }
     }
-    private void enemyAction(GameState state)
+    private  void enemyAction(GameState state)
     {
         if (state == GameState.enemyTurn)
         {
             takeAction();
+            
         }
         
     }
@@ -75,7 +76,12 @@ public class BaseEnemy : BaseUnit
     {
         target = Target.None;                                                   // reset target
         targetUnit = null;
+        foreach(var player in availFoes)
+        {
+
+        }
         GameManager.Instance.updateGameState(GameState.drawState);
+
     }
 
     public enum Target
